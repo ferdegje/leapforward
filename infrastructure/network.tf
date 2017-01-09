@@ -7,6 +7,28 @@ resource "aws_vpc" "main" {
     }
 }
 
+resource "aws_internet_gateway" "gw" {
+    vpc_id = "${aws_vpc.main.id}"
+
+    tags {
+        Name = "IG Jean-Marie"
+        Owner = "${var.ownerName}"
+    }
+}
+
+resource "aws_route_table" "r" {
+    vpc_id = "${aws_vpc.main.id}"
+    route {
+        cidr_block = "0.0.0.0/0"
+        gateway_id = "${aws_internet_gateway.gw.id}"
+    }
+
+    tags {
+        Name = "Jean-Marie"
+        Owner = "${var.ownerName}"
+    }
+}
+
 variable "availability_zones" {
   type    = "map"
   default = {
@@ -22,5 +44,37 @@ resource "aws_subnet" "fromMainVpc" {
   tags {
       Name = "Subnet Jean-Marie"
       Owner = "${var.ownerName}"
+  }
+}
+
+resource "aws_route_table_association" "a" {
+    count = 3
+    subnet_id = "${element(aws_subnet.fromMainVpc.*.id, count.index)}"
+    route_table_id = "${aws_route_table.r.id}"
+}
+
+resource "aws_security_group" "etcd" {
+  name = "jeanmarie_etcd"
+  description = "Allow all required traffic for etcd"
+
+  vpc_id = "${aws_vpc.main.id}"
+
+  ingress {
+    protocol = "ICMP"
+    from_port = 8
+    to_port = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    protocol = "TCP"
+    from_port = 22
+    to_port = 22
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags {
+    Name = "Jean-Marie"
+    Owner = "${var.ownerName}"
   }
 }

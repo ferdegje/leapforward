@@ -15,8 +15,10 @@ resource "aws_instance" "etcd" {
     ami = "${data.aws_ami.ubuntu.id}"
     count = 3
     subnet_id = "${element(aws_subnet.fromMainVpc.*.id, count.index)}"
+    vpc_security_group_ids = ["${aws_security_group.etcd.id}"]
     instance_type = "t2.micro"
     key_name = "${aws_key_pair.jm.key_name}"
+    associate_public_ip_address = true
     tags {
         Name = "Etcd Jean-Marie"
         Owner = "${var.ownerName}"
