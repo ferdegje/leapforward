@@ -16,8 +16,13 @@ resource "aws_instance" "etcd" {
     count = 3
     subnet_id = "${element(aws_subnet.fromMainVpc.*.id, count.index)}"
     instance_type = "t2.micro"
+    key_name = "${aws_key_pair.jm.key_name}"
     tags {
         Name = "Etcd Jean-Marie"
         Owner = "Jean-Marie"
     }
+}
+
+output "ip" {
+  value = "${aws_instance.etcd.1.ip}"
 }
