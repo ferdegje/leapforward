@@ -3,4 +3,4 @@
 *.tfstate.backup
 
 # Credentials file
-variables.tfvars
+variables.tf
