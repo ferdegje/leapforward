@@ -19,7 +19,7 @@ resource "aws_instance" "etcd" {
     key_name = "${aws_key_pair.jm.key_name}"
     tags {
         Name = "Etcd Jean-Marie"
-        Owner = "Jean-Marie"
+        Owner = "${var.ownerName}"
     }
 }
 
