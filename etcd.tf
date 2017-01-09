@@ -18,6 +18,6 @@ resource "aws_instance" "etcd" {
     instance_type = "t2.micro"
     tags {
         Name = "Etcd Jean-Marie"
-        Author = "Jean-Marie"
+        Owner = "Jean-Marie"
     }
 }

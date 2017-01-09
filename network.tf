@@ -3,7 +3,7 @@ resource "aws_vpc" "main" {
 
     tags {
         Name = "VPC Jean-Marie"
-        Author = "Jean-Marie"
+        Owner = "Jean-Marie"
     }
 }
 
@@ -21,6 +21,6 @@ resource "aws_subnet" "fromMainVpc" {
   cidr_block        = "${cidrsubnet(aws_vpc.main.cidr_block, 8, count.index)}"
   tags {
       Name = "Subnet Jean-Marie"
-      Author = "Jean-Marie"
+      Owner = "Jean-Marie"
   }
 }
