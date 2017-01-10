@@ -1,0 +1,15 @@
+---
+- hosts: tag_Name_Etcd_Jean_Marie
+  vars:
+    ETCD_VER: v3.1.0-rc.1
+    DOWNLOAD_URL: https://github.com/coreos/etcd/releases/download
+  remote_user: ubuntu
+  tasks:
+  - name: Download Etcd
+    get_url:
+      url: "{{DOWNLOAD_URL}}/{{ETCD_VER}}/etcd-{{ETCD_VER}}-linux-amd64.tar.gz"
+      dest: "/tmp/etcd-{{ETCD_VER}}-linux-amd64.tar.gz"
+      validate_certs: False
+  handlers:
+    - name: restart apache
+      service: name=httpd state=restarted
